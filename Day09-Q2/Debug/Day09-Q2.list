@@ -39,17 +39,17 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  17 .debug_macro  00018325  00000000  00000000  00003f4b  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_line   00001a55  00000000  00000000  0001c270  2**0
+ 18 .debug_line   00001a53  00000000  00000000  0001c270  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_str    0008bc56  00000000  00000000  0001dcc5  2**0
+ 19 .debug_str    0008bc56  00000000  00000000  0001dcc3  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .comment      00000043  00000000  00000000  000a991b  2**0
+ 20 .comment      00000043  00000000  00000000  000a9919  2**0
                   CONTENTS, READONLY
- 21 .debug_frame  00000380  00000000  00000000  000a9960  2**2
+ 21 .debug_frame  00000380  00000000  00000000  000a995c  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 22 .debug_loclists 0000001f  00000000  00000000  000a9ce0  2**0
+ 22 .debug_loclists 0000001f  00000000  00000000  000a9cdc  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 23 .debug_line_str 0000005f  00000000  00000000  000a9cff  2**0
+ 23 .debug_line_str 0000005f  00000000  00000000  000a9cfb  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -566,43 +566,43 @@ int main(void)
  80004f4:	b580      	push	{r7, lr}
  80004f6:	b084      	sub	sp, #16
  80004f8:	af00      	add	r7, sp, #0
-	//	char str[32];
-		int ret;
-		LIS_Data val;
-		SystemInit();
+	int ret;
+	LIS_Data val;
+	SystemInit();
  80004fa:	f000 f935 	bl	8000768 <SystemInit>
-		LedInit(LED_GREEN);
+	LedInit(LED_GREEN);
  80004fe:	200c      	movs	r0, #12
  8000500:	f7ff fe62 	bl	80001c8 <LedInit>
-		LedInit(LED_ORANGE);
+	LedInit(LED_ORANGE);
  8000504:	200d      	movs	r0, #13
  8000506:	f7ff fe5f 	bl	80001c8 <LedInit>
-		LedInit(LED_RED);
+	LedInit(LED_RED);
  800050a:	200e      	movs	r0, #14
  800050c:	f7ff fe5c 	bl	80001c8 <LedInit>
-		LedInit(LED_BLUE);
+	LedInit(LED_BLUE);
  8000510:	200f      	movs	r0, #15
  8000512:	f7ff fe59 	bl	80001c8 <LedInit>
-		LIS_Init();
+	LIS_Init();
  8000516:	f7ff ff55 	bl	80003c4 <LIS_Init>
-		DelayMs(50);
+	DelayMs(50);
  800051a:	2032      	movs	r0, #50	@ 0x32
  800051c:	f7ff ffc2 	bl	80004a4 <DelayMs>
 
-
-		while(1) {
-			ret = LIS_DRdy();
+	while(1)
+	{
+		ret = LIS_DRdy();
  8000520:	f7ff ffad 	bl	800047e <LIS_DRdy>
  8000524:	60f8      	str	r0, [r7, #12]
-			if(ret) {
+		if(ret)
  8000526:	68fb      	ldr	r3, [r7, #12]
  8000528:	2b00      	cmp	r3, #0
  800052a:	d0f9      	beq.n	8000520 <main+0x2c>
-				val = LIS_GetData();
+		{
+			val = LIS_GetData();
  800052c:	1d3b      	adds	r3, r7, #4
  800052e:	4618      	mov	r0, r3
  8000530:	f7ff ff5f 	bl	80003f2 <LIS_GetData>
-				DelayMs(50);
+			DelayMs(50);
  8000534:	2032      	movs	r0, #50	@ 0x32
  8000536:	f7ff ffb5 	bl	80004a4 <DelayMs>
 
@@ -666,6 +666,7 @@ int main(void)
  80005a0:	f7ff fe82 	bl	80002a8 <LedOff>
  80005a4:	e7bc      	b.n	8000520 <main+0x2c>
 			}
+
 			else if(val.y > 2000)
  80005a6:	f9b7 3006 	ldrsh.w	r3, [r7, #6]
  80005aa:	f5b3 6ffa 	cmp.w	r3, #2000	@ 0x7d0
@@ -683,7 +684,7 @@ int main(void)
 				LedOff(LED_BLUE);
  80005c2:	200f      	movs	r0, #15
  80005c4:	f7ff fe70 	bl	80002a8 <LedOff>
-			ret = LIS_DRdy();
+		ret = LIS_DRdy();
  80005c8:	e7aa      	b.n	8000520 <main+0x2c>
 	...
 
@@ -760,7 +761,7 @@ void SPI_Init(void) {
  8000644:	4a21      	ldr	r2, [pc, #132]	@ (80006cc <SPI_Init+0x100>)
  8000646:	f443 4328 	orr.w	r3, r3, #43008	@ 0xa800
  800064a:	6013      	str	r3, [r2, #0]
-	GPIOA->OSPEEDR &= ~(BV(SPI_MOSI_PIN*2+1)|BV(SPI_MISO_PIN*2+1)|BV(SPI_SCLK_PIN*2+1)); // GPIO speed=Medium(0b01)
+	GPIOA->OSPEEDR &= ~(BV(SPI_MOSI_PIN*2+1)|BV(SPI_MISO_PIN*2+1)|BV(SPI_SCLK_PIN*2+1));
  800064c:	4b1f      	ldr	r3, [pc, #124]	@ (80006cc <SPI_Init+0x100>)
  800064e:	689b      	ldr	r3, [r3, #8]
  8000650:	4a1e      	ldr	r2, [pc, #120]	@ (80006cc <SPI_Init+0x100>)
@@ -772,7 +773,7 @@ void SPI_Init(void) {
  800065c:	4a1b      	ldr	r2, [pc, #108]	@ (80006cc <SPI_Init+0x100>)
  800065e:	f443 43a8 	orr.w	r3, r3, #21504	@ 0x5400
  8000662:	6093      	str	r3, [r2, #8]
-	GPIOA->PUPDR &= ~(BV(SPI_MOSI_PIN*2)|BV(SPI_MISO_PIN*2)|BV(SPI_SCLK_PIN*2)); // GPIO Pull-Down (0b10)
+	GPIOA->PUPDR &= ~(BV(SPI_MOSI_PIN*2)|BV(SPI_MISO_PIN*2)|BV(SPI_SCLK_PIN*2));
  8000664:	4b19      	ldr	r3, [pc, #100]	@ (80006cc <SPI_Init+0x100>)
  8000666:	68db      	ldr	r3, [r3, #12]
  8000668:	4a18      	ldr	r2, [pc, #96]	@ (80006cc <SPI_Init+0x100>)
@@ -784,13 +785,13 @@ void SPI_Init(void) {
  8000674:	4a15      	ldr	r2, [pc, #84]	@ (80006cc <SPI_Init+0x100>)
  8000676:	f443 4328 	orr.w	r3, r3, #43008	@ 0xa800
  800067a:	60d3      	str	r3, [r2, #12]
-	GPIOA->OTYPER &= ~(BV(SPI_MOSI_PIN)|BV(SPI_MISO_PIN)|BV(SPI_SCLK_PIN));	// GPIO push-pull
+	GPIOA->OTYPER &= ~(BV(SPI_MOSI_PIN)|BV(SPI_MISO_PIN)|BV(SPI_SCLK_PIN));
  800067c:	4b13      	ldr	r3, [pc, #76]	@ (80006cc <SPI_Init+0x100>)
  800067e:	685b      	ldr	r3, [r3, #4]
  8000680:	4a12      	ldr	r2, [pc, #72]	@ (80006cc <SPI_Init+0x100>)
  8000682:	f023 03e0 	bic.w	r3, r3, #224	@ 0xe0
  8000686:	6053      	str	r3, [r2, #4]
-	GPIOA->AFR[0] |= (SPI_ALT_FN << GPIO_AFRL_AFSEL5_Pos) | (SPI_ALT_FN << GPIO_AFRL_AFSEL6_Pos) | (SPI_ALT_FN << GPIO_AFRL_AFSEL7_Pos); /* BUG FIXED |= */
+	GPIOA->AFR[0] |= (SPI_ALT_FN << GPIO_AFRL_AFSEL5_Pos) | (SPI_ALT_FN << GPIO_AFRL_AFSEL6_Pos) | (SPI_ALT_FN << GPIO_AFRL_AFSEL7_Pos);
  8000688:	4b10      	ldr	r3, [pc, #64]	@ (80006cc <SPI_Init+0x100>)
  800068a:	6a1b      	ldr	r3, [r3, #32]
  800068c:	4a0f      	ldr	r2, [pc, #60]	@ (80006cc <SPI_Init+0x100>)
@@ -798,29 +799,21 @@ void SPI_Init(void) {
  8000692:	f443 03a0 	orr.w	r3, r3, #5242880	@ 0x500000
  8000696:	6213      	str	r3, [r2, #32]
 
-	// SPI bus config
-	// Enable SPI clock
 	RCC->APB2ENR |= RCC_APB2ENR_SPI1EN;
  8000698:	4b0a      	ldr	r3, [pc, #40]	@ (80006c4 <SPI_Init+0xf8>)
  800069a:	6c5b      	ldr	r3, [r3, #68]	@ 0x44
  800069c:	4a09      	ldr	r2, [pc, #36]	@ (80006c4 <SPI_Init+0xf8>)
  800069e:	f443 5380 	orr.w	r3, r3, #4096	@ 0x1000
  80006a2:	6453      	str	r3, [r2, #68]	@ 0x44
-	// CR1: Master=1, BR=0x02(010), LSBF=0, DFF=0 (8-bit), CRCEN=0,
-	//		SSM=1 & SSI=1 (Soft Slave Manage), BIDI=0 and RXONLY=0 for Full Duplex,
-	//		CPOL=0 and CPHA=0 for LIS3DSH
 	SPI1->CR1 = SPI_CR1_MSTR | SPI_CR1_SSM | SPI_CR1_SSI | (0x02 << SPI_CR1_BR_Pos);
  80006a4:	4b0a      	ldr	r3, [pc, #40]	@ (80006d0 <SPI_Init+0x104>)
  80006a6:	f44f 7245 	mov.w	r2, #788	@ 0x314
  80006aa:	601a      	str	r2, [r3, #0]
-
-	// CR2 = Motorola Frame, No intr enabled, No dma enabled, No SS output
 	SPI1->CR2 = 0x0000;
  80006ac:	4b08      	ldr	r3, [pc, #32]	@ (80006d0 <SPI_Init+0x104>)
  80006ae:	2200      	movs	r2, #0
  80006b0:	605a      	str	r2, [r3, #4]
-	// Enable SPI
-	SPI1->CR1 |= SPI_CR1_SPE; /*bug fixed |= */
+	SPI1->CR1 |= SPI_CR1_SPE;
  80006b2:	4b07      	ldr	r3, [pc, #28]	@ (80006d0 <SPI_Init+0x104>)
  80006b4:	681b      	ldr	r3, [r3, #0]
  80006b6:	4a06      	ldr	r2, [pc, #24]	@ (80006d0 <SPI_Init+0x104>)
@@ -843,7 +836,6 @@ uint16_t SPI_Transmit(uint8_t dataW) {
  80006d8:	af00      	add	r7, sp, #0
  80006da:	4603      	mov	r3, r0
  80006dc:	71fb      	strb	r3, [r7, #7]
-	// wait while tx regr is not empty
 	while(!(SPI1->SR & SPI_SR_TXE))
  80006de:	bf00      	nop
  80006e0:	4b0d      	ldr	r3, [pc, #52]	@ (8000718 <SPI_Transmit+0x44>)
@@ -852,7 +844,6 @@ uint16_t SPI_Transmit(uint8_t dataW) {
  80006e8:	2b00      	cmp	r3, #0
  80006ea:	d0f9      	beq.n	80006e0 <SPI_Transmit+0xc>
 		;
-	// write given data into spi data regr
 	uint32_t frame = dataW;
  80006ec:	79fb      	ldrb	r3, [r7, #7]
  80006ee:	60fb      	str	r3, [r7, #12]
@@ -860,7 +851,6 @@ uint16_t SPI_Transmit(uint8_t dataW) {
  80006f0:	4a09      	ldr	r2, [pc, #36]	@ (8000718 <SPI_Transmit+0x44>)
  80006f2:	68fb      	ldr	r3, [r7, #12]
  80006f4:	60d3      	str	r3, [r2, #12]
-	// wait while rx regr is empty
 	while(!(SPI1->SR & SPI_SR_RXNE))
  80006f6:	bf00      	nop
  80006f8:	4b07      	ldr	r3, [pc, #28]	@ (8000718 <SPI_Transmit+0x44>)
@@ -869,7 +859,6 @@ uint16_t SPI_Transmit(uint8_t dataW) {
  8000700:	2b00      	cmp	r3, #0
  8000702:	d0f9      	beq.n	80006f8 <SPI_Transmit+0x24>
 		;
-	// read data from spi data regr
 	frame = SPI1->DR;
  8000704:	4b04      	ldr	r3, [pc, #16]	@ (8000718 <SPI_Transmit+0x44>)
  8000706:	68db      	ldr	r3, [r3, #12]
@@ -891,13 +880,11 @@ uint16_t SPI_Receive(void) {
  800071c:	b580      	push	{r7, lr}
  800071e:	b082      	sub	sp, #8
  8000720:	af00      	add	r7, sp, #0
-	// send dummy data (0x00) and receive data from slave
 	uint32_t val = SPI_Transmit(0x00);
  8000722:	2000      	movs	r0, #0
  8000724:	f7ff ffd6 	bl	80006d4 <SPI_Transmit>
  8000728:	4603      	mov	r3, r0
  800072a:	607b      	str	r3, [r7, #4]
-	// return received data
 	return val;
  800072c:	687b      	ldr	r3, [r7, #4]
  800072e:	b29b      	uxth	r3, r3
@@ -912,7 +899,6 @@ uint16_t SPI_Receive(void) {
 void SPI_CS_Enable(void) {
  8000738:	b480      	push	{r7}
  800073a:	af00      	add	r7, sp, #0
-	// PE.3 = 0 (active low)
 	GPIOE->BSRR = BV(SPI_CS_CLR_BIT);
  800073c:	4b03      	ldr	r3, [pc, #12]	@ (800074c <SPI_CS_Enable+0x14>)
  800073e:	f44f 2200 	mov.w	r2, #524288	@ 0x80000
@@ -929,7 +915,6 @@ void SPI_CS_Enable(void) {
 void SPI_CS_Disable(void) {
  8000750:	b480      	push	{r7}
  8000752:	af00      	add	r7, sp, #0
-	// PE.3 = 1 (active low)
 	GPIOE->BSRR = BV(SPI_CS_SET_BIT);
  8000754:	4b03      	ldr	r3, [pc, #12]	@ (8000764 <SPI_CS_Disable+0x14>)
  8000756:	2208      	movs	r2, #8
