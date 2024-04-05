@@ -16,4 +16,7 @@
 
 void TimerInit(uint32_t ms);
 
+extern int exti0_flag;
+
+
 #endif /* TIMER_H_ */

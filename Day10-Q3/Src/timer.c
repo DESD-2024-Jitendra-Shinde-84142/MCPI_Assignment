@@ -5,9 +5,8 @@
  *      Author: jitendra
  */
 
-#include<stdio.h>
 #include "timer.h"
-#include "i2c_lcd.h"
+
 
 void TimerInit(uint32_t ms) {
 
@@ -27,18 +26,15 @@ void TimerInit(uint32_t ms) {
 	TIM7->CR1 |= TIM_CR1_CEN;
 }
 
-volatile int count = 0;
+int exti0_flag = 0;
 
 void TIM7_IRQHandler(void)
 {
-	char str[24];
-
 	if(TIM7->SR & TIM_SR_UIF) {
 
 		TIM7->SR &= ~TIM_SR_UIF;
-		count++;
-		sprintf(str,"   Count = %d",count);
-		LcdPuts(LCD_LINE2,str);
+		exti0_flag = 1;
+
 	}
 }
 

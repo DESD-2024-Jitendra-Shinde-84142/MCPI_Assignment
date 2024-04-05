@@ -30,12 +30,21 @@
 
 int main(void)
 {
+	char str[24];
+	int count = 0;
 	SystemInit();
 	LcdInit();
 	LcdWrite(LCD_CMD, LCD_CLEAR);
 	LcdPuts(LCD_LINE1,"   Assignment");
 	TimerInit(1000);
-	while(1);
+	while(1) {
+	while(exti0_flag == 0)
+		;
+	count++;
+	sprintf(str,"   Count = %d",count);
+	LcdPuts(LCD_LINE2,str);
+	exti0_flag = 0;
+	}
 	return 0;
 }
 
